@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+# Copyright (c) 2021-2026 community-scripts ORG
+# Author: simounet
+# License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://codeberg.org/LeedRSS/Leed
+
+source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
+color
+verb_ip6
+catch_errors
+setting_up_container
+network_check
+update_os
+
+PHP_VERSION="8.4" PHP_APACHE="YES" PHP_MODULE="mysqli,gd,curl,mbstring,xml,zip" setup_php
+setup_mariadb
+MARIADB_DB_NAME="leed_db" MARIADB_DB_USER="leed_user" setup_mariadb_db
+
+fetch_and_deploy_gh_release "leed" "LeedRSS/Leed" "tarball"
+
+msg_info "Configuring Leed"
+cd /opt/leed
+chown -R www-data:www-data /opt/leed
+chmod -R g+rX /opt/leed
+msg_ok "Configured Leed"
+
+msg_info "Setting up cron job for feed refresh"
+cat <<EOF >/etc/cron.d/leed-action
+* * * * * www-data /bin/php -f /opt/leed/action.php > /tmp/leed.log 2>&1
+EOF
+chmod 644 /etc/cron.d/leed-action
+msg_ok "Set up Cron - if you need to modify the timing edit the file /etc/cron.d/leed-action"
+
+msg_info "Creating VHOST"
+cat <<EOF >/etc/apache2/sites-available/leed.conf
+<VirtualHost *:80>
+    ServerName leed
+    DocumentRoot /opt/leed
+
+    <Directory /opt/leed>
+        Options FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog /var/log/apache2/leed_error.log
+    CustomLog /var/log/apache2/leed_access.log combined
+
+    AllowEncodedSlashes On
+</VirtualHost>
+EOF
+$STD a2ensite leed
+$STD a2enmod rewrite deflate expires headers mime setenvif
+$STD a2dissite 000-default.conf
+$STD systemctl reload apache2
+msg_ok "Created Service"
+
+motd_ssh
+customize
+cleanup_lxc

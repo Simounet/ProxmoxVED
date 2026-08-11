@@ -1,0 +1,42 @@
+{
+  "name": "leed",
+  "slug": "leed",
+  "categories": [
+    12
+  ],
+  "date_created": "2026-08-11",
+  "type": "ct",
+  "updateable": true,
+  "privileged": false,
+  "architectures": ["amd64"],
+  "interface_port": 80,
+  "documentation": "https://codeberg.org/LeedRSS/Leed",
+  "website": "https://codeberg.org/LeedRSS/Leed",
+  "repository": "https://codeberg.org/LeedRSS/Leed",
+  "logo": "https://codeberg.org/repo-avatars/039da8fd67f33371033b0ba934a22776c55eaf5b547a4c114a8f6f5cb8d062a9",
+  "description": "Leed (short for Light Feed) is a minimalist RSS/ATOM aggregator which offers fast RSS consultation and non-intrusive features.",
+  "install_methods": [
+    {
+      "type": "default",
+      "script": "ct/leed.sh",
+      "config_path": "/opt/leed/constant.php",
+      "resources": {
+        "cpu": 1,
+        "ram": 1024,
+        "hdd": 1,
+        "os": "Debian",
+        "version": "13"
+      }
+    }
+  ],
+  "default_credentials": {
+    "username": "root",
+    "password": null
+  },
+  "notes": [
+    {
+      "text": "Test.",
+      "type": "info"
+    }
+  ]
+}
