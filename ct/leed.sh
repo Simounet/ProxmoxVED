@@ -18,8 +18,8 @@ var_version="${var_version:-13}"
 var_arm64="${var_arm64:-yes}"
 var_unprivileged="${var_unprivileged:-1}"
 
-export var_leed_user_name="${var_leed_user_name:leed}"
-export var_leed_user_password="${var_leed_user_password:leed}"
+export var_leed_user_login="${var_leed_user_login:-leed}"
+export var_leed_user_password="${var_leed_user_password:-$(random_password)}"
 
 header_info "$APP"
 variables
@@ -79,5 +79,5 @@ msg_ok "Completed successfully!\n"
 echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
 echo -e "${INFO}${YW}Access it using the following URL:${CL}"
 echo -e "${GATEWAY}${BGN}http://${IP}${CL}"
-echo -e "${INFO}${YW}Leed Username: ${var_leed_user_name}${CL}"
-echo -e "${INFO}${YW}Leed Password: ${var_leed_user_password}${CL}"
+echo -e "${INFO}${YW}Leed User Login: ${var_leed_user_login}${CL}"
+echo -e "${INFO}${YW}Leed User Password: ${var_leed_user_password}${CL}"

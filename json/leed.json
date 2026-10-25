@@ -33,10 +33,19 @@
     "username": "root",
     "password": null
   },
-  "notes": [
+  "app_vars": [
     {
-      "text": "Test.",
-      "type": "info"
+      "name": "var_leed_user_login",
+      "label": "Leed User Login",
+      "type": "text",
+      "default": "leed"
+    },
+    {
+      "name": "var_leed_user_password",
+      "label": "Leed User Password",
+      "type": "password",
+      "secret": true,
+      "help": "Generated when empty. Shown at the end of the install output either way."
     }
   ]
 }
