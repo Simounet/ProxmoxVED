@@ -17,7 +17,7 @@ PHP_VERSION="8.4" PHP_APACHE="YES" PHP_MODULE="mysqli,gd,curl,mbstring,xml,zip" 
 setup_mariadb
 MARIADB_DB_NAME="leed_db" MARIADB_DB_USER="leed_user" setup_mariadb_db
 
-fetch_and_deploy_gh_release "leed" "LeedRSS/Leed" "tarball"
+fetch_and_deploy_codeberg_release "leed" "LeedRSS/Leed" "tarball"
 
 msg_info "Configuring Leed"
 cd /opt/leed
@@ -61,13 +61,7 @@ msg_info "Creating constant.php and new user"
 curl -fsS "http://${LOCAL_IP}/install.php" \
    -o /tmp/leed-install-response.txt \
   -X POST \
-  -H 'User-Agent: Mozilla/5.0 (Linux; x64; rv:161.0) Gecko/20100101 Firefox/161.0' \
-  -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' \
-  -H 'Accept-Language: fr,fr-FR;q=0.9,en-US;q=0.8,en;q=0.7' \
-  -H 'Accept-Encoding: gzip, deflate' \
   -H 'Content-Type: application/x-www-form-urlencoded' \
-  -H 'Sec-GPC: 1' \
-  -H 'Connection: keep-alive' \
   --data-raw "install_changeLngLeed=fr&root=http%3A%2F%2F${LOCAL_IP}&mysqlHost=127.0.0.1&mysqlLogin=${MARIADB_DB_USER}&mysqlMdp=${MARIADB_DB_PASS}&mysqlBase=${MARIADB_DB_NAME}&mysqlPrefix=leed__&login=${var_leed_user_login}&password=${var_leed_user_password}&installButton="
 
 motd_ssh
