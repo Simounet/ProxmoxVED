@@ -50,11 +50,25 @@ cat <<EOF >/etc/apache2/sites-available/leed.conf
     AllowEncodedSlashes On
 </VirtualHost>
 EOF
+
 $STD a2ensite leed
 $STD a2enmod rewrite deflate expires headers mime setenvif
 $STD a2dissite 000-default.conf
 $STD systemctl reload apache2
 msg_ok "Created Service"
+
+msg_info "Creating constant.php and new user"
+curl -fsS "http://${LOCAL_IP}/install.php" \
+   -o /tmp/leed-install-response.txt \
+  -X POST \
+  -H 'User-Agent: Mozilla/5.0 (Linux; x64; rv:161.0) Gecko/20100101 Firefox/161.0' \
+  -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' \
+  -H 'Accept-Language: fr,fr-FR;q=0.9,en-US;q=0.8,en;q=0.7' \
+  -H 'Accept-Encoding: gzip, deflate' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -H 'Sec-GPC: 1' \
+  -H 'Connection: keep-alive' \
+  --data-raw "install_changeLngLeed=fr&root=http%3A%2F%2F${LOCAL_IP}&mysqlHost=127.0.0.1&mysqlLogin=${MARIADB_DB_USER}&mysqlMdp=${MARIADB_DB_PASS}&mysqlBase=${MARIADB_DB_NAME}&mysqlPrefix=leed__&login=user&password=pass&installButton="
 
 motd_ssh
 customize
